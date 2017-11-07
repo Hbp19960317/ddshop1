@@ -6,6 +6,8 @@ import com.dhc.ddshop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ItemServiceImpl implements ItemService {
 
@@ -19,4 +21,10 @@ public class ItemServiceImpl implements ItemService {
         TbItem tbItem=itemDao.selectByPrimaryKey(itemId);
         return tbItem;
     }
+
+    @Override
+    public List<TbItem> getAll() {
+        return itemDao.selectByExample(null);
+    }
+
 }
