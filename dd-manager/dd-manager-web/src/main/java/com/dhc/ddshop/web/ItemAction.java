@@ -2,6 +2,8 @@ package com.dhc.ddshop.web;
 
 import com.dhc.ddshop.pojo.po.TbItem;
 import com.dhc.ddshop.service.ItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -13,12 +15,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+
 @Controller
 @Scope("prototype")
 public class ItemAction {
 
    @Autowired
 private ItemService itemService;
+
+   private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @ResponseBody
     @RequestMapping(value = "/item/{itemId}",method = RequestMethod.GET)
@@ -36,5 +41,18 @@ private ItemService itemService;
         }
 
         return page;
+    }
+
+    @ResponseBody
+    @RequestMapping("/items")
+    public List<TbItem> listItems(){
+        List<TbItem> list=null;
+        try {
+            list=itemService.listItems();
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return list;
     }
 }

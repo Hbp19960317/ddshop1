@@ -9,6 +9,8 @@ public interface ItemService {
     //根据id查找
     TbItem getById(Long itemId);
 
-
+   //查找所有
     List<TbItem> getAll();
+
+    List<TbItem> listItems();
 }
