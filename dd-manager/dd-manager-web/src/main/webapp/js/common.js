@@ -1,4 +1,3 @@
-
 var ddshop = {
     //点击左侧导航树上的节点，添加选项卡
     registerMenuEvent:function(){

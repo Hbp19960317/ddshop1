@@ -1,17 +1,17 @@
 package com.dhc.ddshop.web;
 
+import com.dhc.ddshop.common.dto.Order;
+import com.dhc.ddshop.common.dto.Page;
+import com.dhc.ddshop.common.dto.Result;
 import com.dhc.ddshop.pojo.po.TbItem;
+import com.dhc.ddshop.pojo.vo.TbItemCustom;
 import com.dhc.ddshop.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,16 +34,13 @@ private ItemService itemService;
     }
 
     @RequestMapping("/{page}")
-    public String  page(@PathVariable("page") String page, Model model){
-        if (page.equals("item-list")){
-            List<TbItem> tbItems=itemService.getAll();
-            model.addAttribute("list",tbItems);
-        }
+    public String  page(@PathVariable("page") String page){
+
 
         return page;
     }
 
-    @ResponseBody
+   /* @ResponseBody
     @RequestMapping("/items")
     public List<TbItem> listItems(){
         List<TbItem> list=null;
@@ -54,5 +51,59 @@ private ItemService itemService;
             e.printStackTrace();
         }
         return list;
+    }*/
+
+   //分页查找所有
+    @ResponseBody
+    @RequestMapping("/items")
+   public Result<TbItemCustom> listItemsByPage(Page page, Order order){
+        Result<TbItemCustom> list=null;
+        try {
+            list=itemService.listItemsByPage(page,order);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return list;
+   }
+
+   //删除
+   @ResponseBody
+   @RequestMapping("/items/batch")
+   public int updateBatch(@RequestParam("ids[]")List<Long> ids){
+       int i=0;
+       try {
+           i=itemService.updateBatch(ids);
+       }catch (Exception e){
+           logger.error(e.getMessage(),e);
+       }
+       return i;
+   }
+
+   //上架
+    @ResponseBody
+    @RequestMapping("/items/iconup")
+    public int updateIconup(@RequestParam("ids[]")List<Long> ids){
+        int i=0;
+        try {
+            i=itemService.updateIconup(ids);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+        }
+        return i;
+    }
+
+
+    //下架
+    @ResponseBody
+    @RequestMapping("/items/icondown")
+    public int updateIcondown(@RequestParam("ids[]")List<Long> ids){
+        int  i=0;
+        try{
+            i=itemService.updateIcondown(ids);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+        }
+        return i;
     }
 }
