@@ -3,6 +3,7 @@ package com.dhc.ddshop.service.impl;
 import com.dhc.ddshop.common.dto.Order;
 import com.dhc.ddshop.common.dto.Page;
 import com.dhc.ddshop.common.dto.Result;
+import com.dhc.ddshop.pojo.vo.TbItemQuery;
 import com.dhc.ddshop.dao.TbItemCustomMapper;
 import com.dhc.ddshop.dao.TbItemMapper;
 import com.dhc.ddshop.pojo.po.TbItem;
@@ -52,17 +53,18 @@ public class ItemServiceImpl implements ItemService {
     }*/
 
     @Override
-    public Result<TbItemCustom> listItemsByPage(Page page, Order order) {
+    public Result<TbItemCustom> listItemsByPage(Page page, Order order, TbItemQuery query) {
         Result<TbItemCustom> result = null;
         try {
             //创建以一个MAp封装前台传递过来的参数
             Map<String,Object> map=new HashMap<String,Object>();
             map.put("page",page);
             map.put("order",order);
+            map.put("query",query);
             //1创建一个响应参数实体类
             result=new Result<TbItemCustom>();
 
-            int total=itemCustomDao.countItems();
+            int total=itemCustomDao.countItems(map);
             //2对total进行设值(符合条件的总记录数)
             result.setTotal(total);
             //3对rows进行设值(指定页码显示记录集合)
